@@ -8,7 +8,7 @@ TEMPLATE_DEBUG = DEBUG
 
 GPLAY_USER = "" # Define these in local_settings.py, not here
 GPLAY_PASS = "" # Define these in local_settings.py, not here
-SITE_ROOT = "http://0.0.0.0:80" # If you serve from a different port, change this
+SITE_ROOT = "http://0.0.0.0:8080" # If you serve from a different port, change this
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__)) + '/..'
 
@@ -32,7 +32,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["raspberrypi"]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -93,19 +93,26 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '4f)-90h^38b8xr3wsa6fo_8-ot!e1xo__*6pz3g7k(9zqj)s-l'
+SECRET_KEY = '3ms56kggh^38b8xigm;jdy,6w0aklgjijyhtesg86ge9zqj)s-l'
 
 # List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'play_pi.context_processors.mpd_status',
-)
+TEMPLATES = [{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS' : [
+        '/usr/local/lib/play-pi/templates',
+    ],
+    'OPTIONS' : {
+        'loaders' : [
+            'django.template.loaders.filesystem.Loader',
+            'django.template.loaders.app_directories.Loader',
+            #'django.template.loaders.eggs.Loader',
+        ],
+        'context_processors': [
+            'django.contrib.auth.context_processors.auth',
+            'play_pi.context_processors.mpd_status',
+        ],
+    }
+}]
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -121,13 +128,6 @@ ROOT_URLCONF = 'play_pi.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'play_pi.wsgi.application'
-
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    PROJECT_PATH + '/templates',
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',

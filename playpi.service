@@ -1,0 +1,15 @@
+[Unit]
+Description=A google play music client for raspberry pi
+After=syslog.target
+
+[Service]
+Type=simple
+User=playpi
+Group=playpi
+WorkingDirectory=/usr/local/lib/play-pi
+ExecStart=/usr/local/lib/play-pi/manage.py runserver 0.0.0.0:8080
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target

@@ -6,7 +6,7 @@ from django.core.cache import cache
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.core.exceptions import *
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 import json
 
@@ -27,44 +27,44 @@ client.connect("localhost", 6600)
 
 def home(request):
 	if GPLAY_USER == "" or GPLAY_PASS == "":
-		return render_to_response('error.html', context_instance=RequestContext(request))
+		return render(request,'error.html', )
 	artists = Artist.objects.all().order_by('name')
-	return render_to_response('index.html',
-		{'list': artists, 'view':'artist'},
-		context_instance=RequestContext(request))
+	return render(request,'index.html',
+		{'list': artists, 'view':'artist'}
+		)
 
 def albums(request):
 	albums = Album.objects.all().order_by('name')
-	return render_to_response('index.html',
-		{'list': albums, 'view':'album'},
-		context_instance=RequestContext(request))
+	return render(request,'index.html',
+		{'list': albums, 'view':'album'}
+		)
 
 def artist(request,artist_id):
 	artist = Artist.objects.get(id=artist_id)
 	albums = Album.objects.filter(artist=artist)
-	return render_to_response('index.html',
-		{'list': albums, 'view':'album', 'artist': artist},
-		context_instance=RequestContext(request))
+	return render(request,'index.html',
+		{'list': albums, 'view':'album', 'artist': artist}
+		)
 
 def playlists(request):
 	playlists = Playlist.objects.all()
-	return render_to_response('index.html',
-		{'list': playlists, 'view':'playlist'},
-		context_instance=RequestContext(request))
+	return render(request,'index.html',
+		{'list': playlists, 'view':'playlist'}
+		)
 
 def playlist(request,playlist_id):
 	playlist = Playlist.objects.get(id=playlist_id)
 	tracks = [pc.track for pc in PlaylistConnection.objects.filter(playlist=playlist)]
-	return render_to_response('playlist.html',
-		{'playlist': playlist, 'tracks': tracks, 'view': 'single_playlist'},
-		context_instance=RequestContext(request))
+	return render(request,'playlist.html',
+		{'playlist': playlist, 'tracks': tracks, 'view': 'single_playlist'}
+		)
 
 def album(request,album_id):
 	album = Album.objects.get(id=album_id)
 	tracks = Track.objects.filter(album=album).order_by('track_no')
-	return render_to_response('album.html',
-		{'album': album, 'tracks': tracks, 'view': 'single_album'},
-		context_instance=RequestContext(request))
+	return render(request,'album.html',
+		{'album': album, 'tracks': tracks, 'view': 'single_album'}
+		)
 
 def play_album(request,album_id):
 	album = Album.objects.get(id=album_id)
